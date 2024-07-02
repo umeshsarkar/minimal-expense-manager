@@ -10,11 +10,12 @@
       <ion-label>
         <h2>{{ expense.date }}</h2>
         <p>{{ expense.location }}</p>
-        <p>{{ expense.amount }}</p>
+        <p>\${{ expense.amount }}</p>
       </ion-label>
     </ion-item>
   </ion-list>
   <ion-item>
-    <ion-label>Total Expense: {{ totalExpense }}</ion-label>
+    <ion-label>Total Expense: \${{ totalExpense }}</ion-label>
   </ion-item>
+  <ion-button expand="full" (click)="navigateToAddExpense()">Add Expense</ion-button>
 </ion-content>

@@ -10,8 +10,10 @@ import { Router } from '@angular/router';
 })
 export class AddExpensePage {
   date: string = '';
+  selectedDate: string = '';
   location: string = '';
   amount: number = 0;
+  isDatePickerOpen: boolean = false;
 
   constructor(private expenseService: ExpenseService, private router: Router) { }
 
@@ -23,5 +25,24 @@ export class AddExpensePage {
     };
     this.expenseService.addExpense(newExpense);
     this.router.navigateByUrl('/view-expenses');
+  }
+
+  navigateToViewExpenses() {
+    this.router.navigateByUrl('/view-expenses');
+  }
+
+  openDatePicker() {
+    this.isDatePickerOpen = true;
+  }
+
+  closeDatePicker() {
+    this.isDatePickerOpen = false;
+  }
+
+  onDateSelected(event: any) {
+    const selectedDate = new Date(event.detail.value);
+    this.date = selectedDate.toISOString();
+    this.selectedDate = selectedDate.toLocaleDateString('en-US');
+    this.closeDatePicker();
   }
 }

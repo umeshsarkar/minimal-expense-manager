@@ -8,16 +8,36 @@
   <ion-list>
     <ion-item>
       <ion-label>Date</ion-label>
-      <ion-datetime displayFormat="MM/DD/YYYY" [(ngModel)]="date"></ion-datetime>
+      <ion-button expand="full" (click)="openDatePicker()">{{ selectedDate ? selectedDate : 'Select Date' }}</ion-button>
     </ion-item>
     <ion-item>
-      <ion-label>Location </ion-label>
-      <ion-input [(ngModel)]="location"></ion-input>
+      <ion-label>Location</ion-label>
+      <ion-select [(ngModel)]="location">
+        <ion-select-option value="Lidl">Lidl</ion-select-option>
+        <ion-select-option value="Rewe">Rewe</ion-select-option>
+        <ion-select-option value="Penny">Penny</ion-select-option>
+        <ion-select-option value="Aldi">Aldi</ion-select-option>
+        <ion-select-option value="DM">DM</ion-select-option>
+        <ion-select-option value="Rossmann">Rossmann</ion-select-option>
+        <ion-select-option value="Other">Other</ion-select-option>
+      </ion-select>
     </ion-item>
     <ion-item>
-      <ion-label>Amount </ion-label>
+      <ion-label>Amount</ion-label>
       <ion-input type="number" [(ngModel)]="amount"></ion-input>
     </ion-item>
   </ion-list>
-  <ion-button expand="full" (click)="addExpense()">Add Expense </ion-button>
+  <ion-button expand="full" (click)="addExpense()">Add Expense</ion-button>
+  <ion-button expand="full" (click)="navigateToViewExpenses()">View Expenses</ion-button>
+
+  <ion-modal [isOpen]="isDatePickerOpen" (didDismiss)="closeDatePicker()">
+    <ng-template>
+      <div class="modal-content">
+        <ion-datetime
+          presentation="date"
+          (ionChange)="onDateSelected($event)">
+        </ion-datetime>
+      </div>
+    </ng-template>
+  </ion-modal>
 </ion-content>
