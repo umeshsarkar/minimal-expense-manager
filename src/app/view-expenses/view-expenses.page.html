@@ -1,0 +1,20 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>View Expenses</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item *ngFor="let expense of expenses">
+      <ion-label>
+        <h2>{{ expense.date }}</h2>
+        <p>{{ expense.location }}</p>
+        <p>{{ expense.amount }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+  <ion-item>
+    <ion-label>Total Expense: {{ totalExpense }}</ion-label>
+  </ion-item>
+</ion-content>
