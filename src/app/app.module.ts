@@ -1,17 +1,31 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { RouteReuseStrategy } from '@angular/router';
-
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
-
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { IonicStorageModule } from '@ionic/storage-angular';
+import { RouterModule } from '@angular/router';
+import { Storage } from '@ionic/storage-angular';
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, IonicStorageModule.forRoot()],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
+  imports: [
+    BrowserModule,
+    IonicModule.forRoot(),
+    AppRoutingModule,
+    RouterModule.forRoot([])
+  ],
+  providers: [
+    Storage,
+    { provide: IonicRouteStrategy, useClass: IonicRouteStrategy }
+  ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule {
+  constructor(private storage: Storage) {
+    this.init();
+  }
+
+  private async init() {
+    await this.storage.create();
+  }
+}

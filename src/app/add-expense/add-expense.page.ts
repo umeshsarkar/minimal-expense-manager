@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { ExpenseService } from '../service/expense.service';
 import { Expense } from '../model/expense.model';
 import { Router } from '@angular/router';
+import { Location } from '../model/location.enum';
+import { ToastController } from '@ionic/angular'
 
 @Component({
   selector: 'app-add-expense',
@@ -9,23 +11,51 @@ import { Router } from '@angular/router';
   styleUrls: ['./add-expense.page.scss'],
 })
 export class AddExpensePage {
-  date: string = '';
-  selectedDate: string = '';
-  location: string = '';
-  amount: number = 0;
+  date: any ;
+  location: Location | null = null;
+  amount!: number;
   isDatePickerOpen: boolean = false;
+  locations = Object.values(Location);
 
-  constructor(private expenseService: ExpenseService, private router: Router) { }
-
-  addExpense() {
-    const newExpense: Expense = {
-      date: this.date,
-      location: this.location,
-      amount: this.amount,
-    };
-    this.expenseService.addExpense(newExpense);
-    this.router.navigateByUrl('/view-expenses');
+  constructor(private expenseService: ExpenseService, private router: Router, private toastController:ToastController) {
+    this.setCurrentDate();
   }
+
+  setCurrentDate() {
+    const now = new Date();
+    this.date = now.toLocaleDateString('de');
+  }
+
+  async addExpense() {
+    if (this.date && this.location && this.amount > 0) {
+      const newExpense: Expense = {
+        date: this.date,
+        location: this.location,
+        amount: this.amount,
+      };
+      await this.expenseService.addExpense(newExpense);
+
+      // Clear the form fields
+      this.date = this.setCurrentDate();
+      this.location = null;
+      this.amount = 0;
+
+      this.presentToast('Expanse is added');
+    } else {
+      alert('Please fill in all fields with valid data');
+    }
+  }
+
+  async presentToast(toastMessage: string) {
+      const toast = await this.toastController.create({
+        message: toastMessage,
+        duration: 1000,
+        position: 'bottom',
+      });
+
+      await toast.present();
+  }
+
 
   navigateToViewExpenses() {
     this.router.navigateByUrl('/view-expenses');
@@ -41,8 +71,7 @@ export class AddExpensePage {
 
   onDateSelected(event: any) {
     const selectedDate = new Date(event.detail.value);
-    this.date = selectedDate.toISOString();
-    this.selectedDate = selectedDate.toLocaleDateString('en-US');
+    this.date = selectedDate.toLocaleDateString('de');
     this.closeDatePicker();
   }
 }

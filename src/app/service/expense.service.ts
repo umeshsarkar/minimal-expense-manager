@@ -1,41 +1,40 @@
 import { Injectable } from '@angular/core';
-import { Storage } from '@ionic/storage-angular';
 import { Expense } from '../model/expense.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ExpenseService {
   private expenses: Expense[] = [];
-  private _storage: Storage | null = null;
 
-  constructor(private storage: Storage) {
-    this.init();
-  }
-
-  async init() {
-    const storage = await this.storage.create();
-    this._storage = storage;
+  constructor() {
     this.loadExpenses();
-  }
-
-  private async loadExpenses() {
-    const storedExpenses = await this._storage?.get('expenses');
-    if (storedExpenses) {
-      this.expenses = storedExpenses;
-    }
   }
 
   addExpense(expense: Expense) {
     this.expenses.push(expense);
-    this._storage?.set('expenses', this.expenses);
+    this.saveExpenses();
   }
 
   getExpenses(): Expense[] {
-    return [...this.expenses];
+    return this.expenses;
   }
 
   getTotalExpense(): number {
     return this.expenses.reduce((total, expense) => total + expense.amount, 0);
+  }
+
+  deleteExpense(index: number) {
+    this.expenses.splice(index, 1);
+    this.saveExpenses();
+  }
+
+  private saveExpenses() {
+    localStorage.setItem('expenses', JSON.stringify(this.expenses));
+  }
+
+  private loadExpenses() {
+    const savedExpenses = localStorage.getItem('expenses');
+    this.expenses = savedExpenses ? JSON.parse(savedExpenses) : [];
   }
 }
