@@ -1,24 +1,36 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ExpenseService } from '../service/expense.service';
 import { Expense } from '../model/expense.model';
 import { Router } from '@angular/router';
-import { Location } from '../model/location.enum';
-import { ToastController } from '@ionic/angular';
+import { ModalController, ToastController } from '@ionic/angular';
+import { StorageService } from '../service/storage.service';
+import { StoreNamesModalComponent } from './store-names-modal/store-names-modal.component';
 
 @Component({
   selector: 'app-add-expense',
   templateUrl: './add-expense.page.html',
   styleUrls: ['./add-expense.page.scss'],
 })
-export class AddExpensePage {
+export class AddExpensePage implements OnInit {
   date: any;
-  location: Location | null = null;
+  location: string | null = null;
   amount!: number;
   isDatePickerOpen: boolean = false;
-  locations = Object.values(Location);
+  locations: string[] = [];
 
-  constructor(private expenseService: ExpenseService, private router: Router, private toastController: ToastController) {
+  constructor(
+    private expenseService: ExpenseService,
+    private router: Router,
+    private toastController: ToastController,
+    private storageService: StorageService,
+    private modalController: ModalController
+  ) {
     this.setCurrentDate();
+    this.loadStoreNames();
+  }
+
+  async ngOnInit(){
+    await this.loadStoreNames();
   }
 
   setCurrentDate() {
@@ -72,5 +84,22 @@ export class AddExpensePage {
     const selectedDate = new Date(event.detail.value);
     this.date = selectedDate.toLocaleDateString('de');
     this.closeDatePicker();
+  }
+
+  async loadStoreNames() {
+    const storedLocations = await this.storageService.getItem('locations');
+    this.locations = storedLocations ? JSON.parse(storedLocations) : ['Penny', 'Rewe', 'Lidl', 'Donaya', 'Aldi', 'DM', 'Rossmann', 'Other'];
+  }
+
+  async openStoreNamesModal() {
+    const modal = await this.modalController.create({
+      component: StoreNamesModalComponent,
+      showBackdrop: true,
+      cssClass: 'modal-element',
+    });
+
+    modal.onDidDismiss().then(() => this.loadStoreNames());
+
+    await modal.present();
   }
 }
