@@ -13,7 +13,11 @@ export class ViewExpensesPage implements OnInit {
   expenses: Expense[] = [];
   totalExpense: number = 0;
 
-  constructor(private expenseService: ExpenseService, private router: Router, private alertController: AlertController) { }
+  constructor(
+    private expenseService: ExpenseService,
+    private router: Router,
+    private alertController: AlertController
+  ) {}
 
   async ngOnInit() {
     await this.loadExpenses();
@@ -36,10 +40,7 @@ export class ViewExpensesPage implements OnInit {
     const expense = this.expenses[index];
     const alert = await this.alertController.create({
       header: 'Confirm Deletion',
-      message: `Are you sure you want to delete (Amount: ${expense.amount} €,
-      Location: ${expense.location}, Date: ${expense.date})
-      this expense?
-      `,
+      message: `Are you sure you want to delete the expense name "${expense.name}" and amount of "${expense.amount} €"?`,
       cssClass: 'my-custom-class',
       buttons: [
         {
@@ -61,5 +62,4 @@ export class ViewExpensesPage implements OnInit {
 
     await alert.present();
   }
-
 }

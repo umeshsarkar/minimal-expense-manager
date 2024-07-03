@@ -12,11 +12,12 @@ import { StoreNamesModalComponent } from './store-names-modal/store-names-modal.
   styleUrls: ['./add-expense.page.scss'],
 })
 export class AddExpensePage implements OnInit {
+  name!: string;
   date: any;
-  location: string | null = null;
+  category: string | null = null;
   amount!: number;
   isDatePickerOpen: boolean = false;
-  locations: string[] = [];
+  categoryList: string[] = [];
 
   constructor(
     private expenseService: ExpenseService,
@@ -26,11 +27,11 @@ export class AddExpensePage implements OnInit {
     private modalController: ModalController
   ) {
     this.setCurrentDate();
-    this.loadStoreNames();
+    this.loadCategoryList();
   }
 
-  async ngOnInit(){
-    await this.loadStoreNames();
+  async ngOnInit() {
+    await this.loadCategoryList();
   }
 
   setCurrentDate() {
@@ -39,17 +40,23 @@ export class AddExpensePage implements OnInit {
   }
 
   async addExpense() {
-    if (this.date && this.location && this.amount > 0) {
+    if (!this.category) {
+      this.category = 'Uncategorised';
+    }
+
+    if (this.name && this.date && this.category && this.amount > 0) {
       const newExpense: Expense = {
+        name: this.name,
         date: this.date,
-        location: this.location,
+        category: this.category,
         amount: this.amount,
       };
       await this.expenseService.addExpense(newExpense);
 
       // Clear the form fields
+      this.name = '';
       this.setCurrentDate();
-      this.location = null;
+      this.category = null;
       this.amount = 0;
 
       this.presentToast('Expense is added');
@@ -86,9 +93,11 @@ export class AddExpensePage implements OnInit {
     this.closeDatePicker();
   }
 
-  async loadStoreNames() {
-    const storedLocations = await this.storageService.getItem('locations');
-    this.locations = storedLocations ? JSON.parse(storedLocations) : ['Penny', 'Rewe', 'Lidl', 'Donaya', 'Aldi', 'DM', 'Rossmann', 'Other'];
+  async loadCategoryList() {
+    const storedCategoryList = await this.storageService.getItem('category');
+    this.categoryList = storedCategoryList
+      ? JSON.parse(storedCategoryList)
+      : ['Food', 'Internet', 'Transport', 'Car'];
   }
 
   async openStoreNamesModal() {
@@ -98,7 +107,7 @@ export class AddExpensePage implements OnInit {
       cssClass: 'modal-element',
     });
 
-    modal.onDidDismiss().then(() => this.loadStoreNames());
+    modal.onDidDismiss().then(() => this.loadCategoryList());
 
     await modal.present();
   }

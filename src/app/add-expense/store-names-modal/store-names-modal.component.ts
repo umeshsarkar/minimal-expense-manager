@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { StorageService } from 'src/app/service/storage.service';
 
@@ -8,8 +8,8 @@ import { StorageService } from 'src/app/service/storage.service';
   styleUrls: ['./store-names-modal.component.scss'],
 })
 export class StoreNamesModalComponent implements OnInit {
-  locations: string[] = [];
-  newStoreName!: string;
+  categoryList: string[] = [];
+  newCategory!: string;
   isInputInvalid = false;
   isModalOpen = true;
 
@@ -19,39 +19,31 @@ export class StoreNamesModalComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
-    await this.loadStoreNames();
+    await this.loadCategoryList();
   }
 
-  // ngOnDestroy() {
-  //   // this.modalController.onDidDismiss().then((data) => {
-  //   //   if (data.data) {
-  //   //     this.locations = data.data;
-  //   //   }
-  //   // });
-  // }
-
-  async loadStoreNames() {
-    const storedLocations = await this.storageService.getItem('locations');
-    this.locations = storedLocations ? JSON.parse(storedLocations) : ['Penny', 'Rewe', 'Lidl', 'Donaya', 'Aldi', 'DM', 'Rossmann', 'Other'];
+  async loadCategoryList() {
+    const storedLocations = await this.storageService.getItem('category');
+    this.categoryList = storedLocations ? JSON.parse(storedLocations) : ['Food', 'Internet', 'Transport', 'Car'];
   }
 
   async addStoreName() {
-    if (this.newStoreName && !this.locations.includes(this.newStoreName)) {
-      this.locations.push(this.newStoreName);
-      await this.storageService.setItem('locations', JSON.stringify(this.locations));
-      this.newStoreName = '';
-      this.isInputInvalid = false; // reset the invalid state
+    if (this.newCategory && !this.categoryList.includes(this.newCategory)) {
+      this.categoryList.push(this.newCategory);
+      await this.storageService.setItem('category', JSON.stringify(this.categoryList));
+      this.newCategory = '';
+      this.isInputInvalid = false;
     } else {
-      this.isInputInvalid = true; // set the invalid state
+      this.isInputInvalid = true;
     }
   }
 
   async removeStoreName(index: number) {
-    this.locations.splice(index, 1);
-    await this.storageService.setItem('locations', JSON.stringify(this.locations));
+    this.categoryList.splice(index, 1);
+    await this.storageService.setItem('category', JSON.stringify(this.categoryList));
   }
 
   dismissModal() {
-    this.modalController.dismiss(this.locations);
+    this.modalController.dismiss(this.categoryList);
   }
 }
