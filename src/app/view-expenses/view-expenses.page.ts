@@ -36,10 +36,7 @@ export class ViewExpensesPage implements OnInit {
     const expense = this.expenses[index];
     const alert = await this.alertController.create({
       header: 'Confirm Deletion',
-      message: `Are you sure you want to delete (Amount: ${expense.amount} €,
-      Location: ${expense.category}, Date: ${expense.date})
-      this expense?
-      `,
+      message: `Are you sure you want to delete the expense name "${expense.name}" and amount of "${expense.amount} €"?`,
       cssClass: 'my-custom-class',
       buttons: [
         {
