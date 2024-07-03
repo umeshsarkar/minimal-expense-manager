@@ -1,20 +1,36 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>View Expenses</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button default-href="#"></ion-back-button>
+    </ion-buttons>
+    <ion-title color="tertiary">Minimal Expanse Manger</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <ion-item>
+  <ion-label color="tertiary" class="ion-text-center"><h1>View Expenses</h1></ion-label>
+</ion-item>
   <ion-list>
-    <ion-item *ngFor="let expense of expenses">
-      <ion-label>
-        <h2>{{ expense.date }}</h2>
+    <ion-item *ngFor="let expense of expenses; let i = index">
+      <ion-label color="tertiary">
+        <h2>{{ expense.amount }} €</h2>
         <p>{{ expense.location }}</p>
-        <p>{{ expense.amount }}</p>
+        <p>{{ expense.date }}</p>
       </ion-label>
+      <ion-button fill="outline" expand="block" color="danger" (click)="deleteExpense(i)"><ion-icon name="trash-outline"></ion-icon></ion-button>
     </ion-item>
   </ion-list>
-  <ion-item>
-    <ion-label>Total Expense: {{ totalExpense }}</ion-label>
-  </ion-item>
 </ion-content>
+
+<ion-footer>
+  <ion-toolbar class="footer-toolbar">
+    <ion-label color="tertiary" class="ion-text-center">
+      <h1>Total Expenses: {{ totalExpense }} €</h1>
+    </ion-label>
+    <ion-button fill="outline" expand="block" color="tertiary" class="footer-button-margin" (click)="navigateToAddExpense()">
+      <ion-icon slot="start" name="add-circle-outline"></ion-icon>
+      Add New Expense
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>

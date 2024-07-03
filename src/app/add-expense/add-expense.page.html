@@ -1,23 +1,38 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Add Expense</ion-title>
+    <ion-title color="tertiary">Minimal Expense Manager</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <ion-item lines="none">
+    <ion-label color="tertiary" class="ion-text-center"><h1>Add Expense</h1></ion-label>
+  </ion-item>
   <ion-list>
     <ion-item>
-      <ion-label>Date</ion-label>
-      <ion-datetime displayFormat="MM/DD/YYYY" [(ngModel)]="date"></ion-datetime>
+      <ion-select label="Enter the store name" [(ngModel)]="location">
+        <ion-select-option *ngFor="let loc of locations" [value]="loc">{{ loc }}</ion-select-option>
+      </ion-select>
     </ion-item>
     <ion-item>
-      <ion-label>Location </ion-label>
-      <ion-input [(ngModel)]="location"></ion-input>
+      <ion-input label="Enter the date of purchase" labelPlacement="stacked" (click)="openDatePicker()" [(ngModel)]="date"></ion-input>
     </ion-item>
     <ion-item>
-      <ion-label>Amount </ion-label>
-      <ion-input type="number" [(ngModel)]="amount"></ion-input>
+      <ion-input type="number" label="Enter spent amount" labelPlacement="floating" placeholder="Enter spent amount" [(ngModel)]="amount"></ion-input>
     </ion-item>
   </ion-list>
-  <ion-button expand="full" (click)="addExpense()">Add Expense </ion-button>
+  <ion-button fill="outline" color="tertiary" expand="block" (click)="addExpense()">
+    <ion-icon slot="start" name="add-circle-outline"></ion-icon> Add to Expense
+  </ion-button>
+  <ion-button fill="outline" color="tertiary" expand="block" (click)="navigateToViewExpenses()">
+    <ion-icon slot="start" name="eye-outline"></ion-icon>View Expenses
+  </ion-button>
+
+  <ion-modal [isOpen]="isDatePickerOpen" (didDismiss)="closeDatePicker()">
+    <ng-template>
+      <div class="modal-content">
+        <ion-datetime presentation="date" (ionChange)="onDateSelected($event)"></ion-datetime>
+      </div>
+    </ng-template>
+  </ion-modal>
 </ion-content>
