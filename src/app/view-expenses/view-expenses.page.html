@@ -15,7 +15,7 @@
     <ion-item *ngFor="let expense of expenses; let i = index">
       <ion-label color="tertiary">
         <h2>{{ expense.amount }} €</h2>
-        <p>{{ expense.location }}</p>
+        <p>{{ expense.category }}</p>
         <p>{{ expense.date }}</p>
       </ion-label>
       <ion-button fill="outline" expand="block" color="danger" (click)="deleteExpense(i)"><ion-icon name="trash-outline"></ion-icon></ion-button>

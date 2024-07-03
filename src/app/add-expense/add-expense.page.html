@@ -10,8 +10,8 @@
   </ion-item>
   <ion-list>
     <ion-item>
-      <ion-select label="Enter the store name" [(ngModel)]="location">
-        <ion-select-option *ngFor="let loc of locations" [value]="loc">{{ loc }}</ion-select-option>
+      <ion-select label="Category" [(ngModel)]="category">
+        <ion-select-option *ngFor="let loc of categoryList" [value]="loc">{{ loc }}</ion-select-option>
       </ion-select>
       <ion-icon name="create-outline" color="tertiary" (click)="openStoreNamesModal()"></ion-icon>
     </ion-item>

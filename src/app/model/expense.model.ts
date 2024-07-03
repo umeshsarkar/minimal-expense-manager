@@ -1,6 +1,5 @@
 export interface Expense {
     date: string;
-    location: string;
+    category: string;
     amount: number;
   }
-  
