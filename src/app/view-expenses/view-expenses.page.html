@@ -1,12 +1,15 @@
 <ion-header>
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button default-href="#"></ion-back-button>
+    </ion-buttons>
     <ion-title color="tertiary">Minimal Expanse Manger</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <ion-item>
-  <ion-label color="tertiary"><h1>View Expenses</h1></ion-label>
+  <ion-label color="tertiary" class="ion-text-center"><h1>View Expenses</h1></ion-label>
 </ion-item>
   <ion-list>
     <ion-item *ngFor="let expense of expenses; let i = index">
@@ -21,13 +24,11 @@
 </ion-content>
 
 <ion-footer>
-  <ion-toolbar>
-    <ion-item>
-    <ion-label color="tertiary">
+  <ion-toolbar class="footer-toolbar">
+    <ion-label color="tertiary" class="ion-text-center">
       <h1>Total Expenses: {{ totalExpense }} €</h1>
     </ion-label>
-  </ion-item>
-    <ion-button fill="outline" expand="block" color="tertiary" (click)="navigateToAddExpense()">
+    <ion-button fill="outline" expand="block" color="tertiary" class="footer-button-margin" (click)="navigateToAddExpense()">
       <ion-icon slot="start" name="add-circle-outline"></ion-icon>
       Add New Expense
     </ion-button>

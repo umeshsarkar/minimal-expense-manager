@@ -5,32 +5,33 @@
 </ion-header>
 
 <ion-content>
-  <ion-item>
-  <ion-label color="tertiary"><h1>Add Expense</h1></ion-label>
+  <ion-item lines="none">
+    <ion-label color="tertiary" class="ion-text-center"><h1>Add Expense</h1></ion-label>
   </ion-item>
   <ion-list>
-  <ion-item>
-      <ion-select label="Enter the store name" [(ngModel)]="location" color="tertiary">
+    <ion-item>
+      <ion-select label="Enter the store name" [(ngModel)]="location">
         <ion-select-option *ngFor="let loc of locations" [value]="loc">{{ loc }}</ion-select-option>
       </ion-select>
     </ion-item>
     <ion-item>
-      <ion-input label="Enter the date of purchase" labelPlacement="stacked" expand="full" (click)="openDatePicker()" [(ngModel)]="date"></ion-input>
+      <ion-input label="Enter the date of purchase" labelPlacement="stacked" (click)="openDatePicker()" [(ngModel)]="date"></ion-input>
     </ion-item>
     <ion-item>
       <ion-input type="number" label="Enter spent amount" labelPlacement="floating" placeholder="Enter spent amount" [(ngModel)]="amount"></ion-input>
     </ion-item>
   </ion-list>
-  <ion-button fill="outline" color="tertiary" expand="block" (click)="addExpense()"><ion-icon slot="start" name="add-circle-outline"></ion-icon> Add to Expense</ion-button>
-  <ion-button fill="outline" color="tertiary" expand="block" (click)="navigateToViewExpenses()"><ion-icon slot="start" name="eye-outline"></ion-icon>View Expenses</ion-button>
+  <ion-button fill="outline" color="tertiary" expand="block" (click)="addExpense()">
+    <ion-icon slot="start" name="add-circle-outline"></ion-icon> Add to Expense
+  </ion-button>
+  <ion-button fill="outline" color="tertiary" expand="block" (click)="navigateToViewExpenses()">
+    <ion-icon slot="start" name="eye-outline"></ion-icon>View Expenses
+  </ion-button>
 
   <ion-modal [isOpen]="isDatePickerOpen" (didDismiss)="closeDatePicker()">
     <ng-template>
       <div class="modal-content">
-        <ion-datetime
-          presentation="date"
-          (ionChange)="onDateSelected($event)">
-        </ion-datetime>
+        <ion-datetime presentation="date" (ionChange)="onDateSelected($event)"></ion-datetime>
       </div>
     </ng-template>
   </ion-modal>

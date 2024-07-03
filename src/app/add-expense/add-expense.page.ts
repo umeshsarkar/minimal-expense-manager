@@ -3,7 +3,7 @@ import { ExpenseService } from '../service/expense.service';
 import { Expense } from '../model/expense.model';
 import { Router } from '@angular/router';
 import { Location } from '../model/location.enum';
-import { ToastController } from '@ionic/angular'
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-add-expense',
@@ -11,13 +11,13 @@ import { ToastController } from '@ionic/angular'
   styleUrls: ['./add-expense.page.scss'],
 })
 export class AddExpensePage {
-  date: any ;
+  date: any;
   location: Location | null = null;
   amount!: number;
   isDatePickerOpen: boolean = false;
   locations = Object.values(Location);
 
-  constructor(private expenseService: ExpenseService, private router: Router, private toastController:ToastController) {
+  constructor(private expenseService: ExpenseService, private router: Router, private toastController: ToastController) {
     this.setCurrentDate();
   }
 
@@ -36,26 +36,25 @@ export class AddExpensePage {
       await this.expenseService.addExpense(newExpense);
 
       // Clear the form fields
-      this.date = this.setCurrentDate();
+      this.setCurrentDate();
       this.location = null;
       this.amount = 0;
 
-      this.presentToast('Expanse is added');
+      this.presentToast('Expense is added');
     } else {
       alert('Please fill in all fields with valid data');
     }
   }
 
   async presentToast(toastMessage: string) {
-      const toast = await this.toastController.create({
-        message: toastMessage,
-        duration: 1000,
-        position: 'bottom',
-      });
+    const toast = await this.toastController.create({
+      message: toastMessage,
+      duration: 1000,
+      position: 'bottom',
+    });
 
-      await toast.present();
+    await toast.present();
   }
-
 
   navigateToViewExpenses() {
     this.router.navigateByUrl('/view-expenses');

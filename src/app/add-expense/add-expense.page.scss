@@ -4,11 +4,33 @@
     align-items: center;
     height: 100%;
   }
-  
+
 ion-modal {
     --width: 80%;
     --height: 60%;
     --border-radius: 8px;
     --box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   }
-  
+
+ion-label h1 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+  }
+
+ion-item {
+    --background: transparent;
+  }
+
+ion-select, ion-input, ion-select-option {
+    --placeholder-color: var(--ion-color-tertiary);
+    --color: var(--ion-color-tertiary);
+  }
+
+/* Additional styles for labels */
+ion-select::part(label) {
+  color: var(--ion-color-tertiary);
+}
+
+ion-input::part(native) {
+  color: var(--ion-color-tertiary);
+}
