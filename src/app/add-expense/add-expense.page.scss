@@ -34,3 +34,15 @@ ion-select::part(label) {
 ion-input::part(native) {
   color: var(--ion-color-tertiary);
 }
+
+.store-option {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+ion-icon {
+  cursor: pointer;
+  margin-left: 10px;
+}
+
