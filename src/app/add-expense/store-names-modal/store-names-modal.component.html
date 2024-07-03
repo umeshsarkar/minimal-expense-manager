@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title color="tertiary">Manage Store Names</ion-title>
+    <ion-title color="tertiary">Add/Remove Category</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="dismissModal()"><ion-icon name="close-outline"></ion-icon></ion-button>
     </ion-buttons>
@@ -16,7 +16,7 @@
     <ion-item>
       <ion-input placeholder="Add new store name" [(ngModel)]="newCategory"></ion-input>
       <ion-text *ngIf="isInputInvalid" color="danger" class="error-message">
-        Store name already exists or is empty.
+        Category name exists or is empty.
       </ion-text>
       <ion-icon name="add-circle-outline" slot="end" color="tertiary" (click)="addStoreName()"></ion-icon>
     </ion-item>
