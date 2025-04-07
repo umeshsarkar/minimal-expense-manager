@@ -26,3 +26,17 @@ jobs:
 
       - name: Build app
         run: npm run build
+
+      - name: Install Ionic CLI
+        run: npm install -g @ionic/cli
+
+      - name: Build APK
+        run: |
+          ionic capacitor build android --prod
+          cd android && ./gradlew assembleRelease
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: app-release.apk
+          path: android/app/build/outputs/apk/release/app-release.apk
