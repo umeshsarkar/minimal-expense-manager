@@ -42,6 +42,7 @@ jobs:
       - name: Build APK
         run: |
           rm -f capacitor.config.ts  # remove TS config to allow init
+          rm -rf android             # remove existing android platform if present
           ionic capacitor add android
           ionic capacitor build android --prod
           cd android && ./gradlew assembleRelease
