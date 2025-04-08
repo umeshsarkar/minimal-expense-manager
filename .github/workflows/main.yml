@@ -19,10 +19,63 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: '20'
 
       - name: Install dependencies
         run: npm install
 
       - name: Build app
         run: npm run build
+
+      - name: Install Ionic CLI
+        run: npm install -g @ionic/cli@6.16.3
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Install Android SDK
+        uses: android-actions/setup-android@v2
+
+      - name: Build APK
+        run: |
+          rm -f capacitor.config.ts  # remove TS config to allow init
+          rm -rf android             # remove existing android platform if present
+          ionic capacitor add android
+          ionic capacitor build android --prod
+          cd android && ./gradlew assembleRelease
+
+      - name: List APK artifacts
+        run: ls -la android/app/build/outputs/apk/release  # confirm the APK file exists and its name
+
+      - name: Debug APK Path
+        run: |
+          echo "Checking APK file..."
+          ls -la android/app/build/outputs/apk/release
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release.apk
+          path: android/app/build/outputs/apk/release/app-release-unsigned.apk
+
+      - name: Create GitHub Release
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: "release-${{ github.run_number }}"
+          name: "Release ${{ github.run_number }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: android/app/build/outputs/apk/release/app-release-unsigned.apk
+          asset_name: app-release.apk
+          asset_content_type: application/vnd.android.package-archive
