@@ -7,6 +7,8 @@ import {
   IonButton, IonContent, IonDatetime, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonList,
   IonModal, IonSelect, IonSelectOption, IonTitle, IonToolbar, ModalController, ToastController,
 } from '@ionic/angular';
+import { addIcons } from 'ionicons';
+import { addCircleOutline, createOutline, eyeOutline } from 'ionicons/icons';
 import { StorageService } from '../service/storage.service';
 import { StoreNamesModalComponent } from './store-names-modal/store-names-modal.component';
 
@@ -35,6 +37,7 @@ export class AddExpensePage implements OnInit {
   categoryList: string[] = [];
 
   constructor() {
+    addIcons({ addCircleOutline, createOutline, eyeOutline });
     this.setCurrentDate();
     this.loadCategoryList();
   }

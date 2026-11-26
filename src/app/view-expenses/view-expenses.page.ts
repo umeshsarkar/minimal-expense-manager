@@ -6,6 +6,8 @@ import {
   AlertController, IonBackButton, IonButton, IonButtons, IonContent, IonFooter, IonHeader, IonIcon, IonItem,
   IonLabel, IonList, IonTitle, IonToolbar,
 } from '@ionic/angular';
+import { addIcons } from 'ionicons';
+import { addCircleOutline, trashOutline } from 'ionicons/icons';
 
 @Component({
     selector: 'app-view-expenses',
@@ -21,6 +23,10 @@ export class ViewExpensesPage implements OnInit {
   private expenseService = inject(ExpenseService);
   private router = inject(Router);
   private alertController = inject(AlertController);
+
+  constructor() {
+    addIcons({ addCircleOutline, trashOutline });
+  }
 
   expenses: Expense[] = [];
   totalExpense: number = 0;

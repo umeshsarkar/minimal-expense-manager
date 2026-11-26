@@ -4,6 +4,8 @@ import {
   IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonInput, IonItem, IonList, IonText, IonTitle,
   IonToolbar, ModalController,
 } from '@ionic/angular';
+import { addIcons } from 'ionicons';
+import { addCircleOutline, closeOutline, trashOutline } from 'ionicons/icons';
 import { StorageService } from '../../service/storage.service';
 
 @Component({
@@ -19,6 +21,10 @@ import { StorageService } from '../../service/storage.service';
 export class StoreNamesModalComponent implements OnInit {
   private modalController = inject(ModalController);
   private storageService = inject(StorageService);
+
+  constructor() {
+    addIcons({ addCircleOutline, closeOutline, trashOutline });
+  }
 
   categoryList: string[] = [];
   newCategory!: string;

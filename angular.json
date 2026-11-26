@@ -75,6 +75,22 @@
             },
             "ci": {
               "progress": false
+            },
+            "testing": {
+              "aot": false,
+              "optimization": false,
+              "extractLicenses": false,
+              "polyfills": [
+                "src/polyfills.ts"
+              ]
+            },
+            "testing-ci": {
+              "aot": false,
+              "optimization": false,
+              "extractLicenses": false,
+              "polyfills": [
+                "src/polyfills.ts"
+              ]
             }
           },
           "defaultConfiguration": "production"
@@ -101,35 +117,27 @@
           }
         },
         "test": {
-          "builder": "@angular/build:karma",
+          "builder": "@angular/build:unit-test",
           "options": {
-            "main": "src/test.ts",
-            "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.spec.json",
-            "karmaConfig": "karma.conf.js",
-            "inlineStyleLanguage": "scss",
-            "assets": [
-              {
-                "glob": "**/*",
-                "input": "src/assets",
-                "output": "assets"
-              },
-              {
-                "glob": "**/*.svg",
-                "input": "node_modules/ionicons/dist/ionicons/svg",
-                "output": "./svg"
-              }
+            "reporters": [
+              "default"
             ],
-            "styles": [
-              "src/global.scss",
-              "src/theme/variables.scss"
+            "coverageReporters": [
+              "html",
+              "text-summary"
             ],
-            "scripts": []
+            "setupFiles": [
+              "src/test.ts"
+            ],
+            "buildTarget": ":build:testing",
+            "runner": "vitest"
           },
           "configurations": {
             "ci": {
               "progress": false,
-              "watch": false
+              "watch": false,
+              "buildTarget": ":build:testing-ci"
             }
           }
         },
