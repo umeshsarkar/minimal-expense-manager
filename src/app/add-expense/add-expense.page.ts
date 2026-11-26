@@ -7,9 +7,10 @@ import { StorageService } from '../service/storage.service';
 import { StoreNamesModalComponent } from './store-names-modal/store-names-modal.component';
 
 @Component({
-  selector: 'app-add-expense',
-  templateUrl: './add-expense.page.html',
-  styleUrls: ['./add-expense.page.scss'],
+    selector: 'app-add-expense',
+    templateUrl: './add-expense.page.html',
+    styleUrls: ['./add-expense.page.scss'],
+    standalone: false
 })
 export class AddExpensePage implements OnInit {
   name!: string;

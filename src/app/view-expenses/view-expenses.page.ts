@@ -5,9 +5,10 @@ import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 
 @Component({
-  selector: 'app-view-expenses',
-  templateUrl: './view-expenses.page.html',
-  styleUrls: ['./view-expenses.page.scss'],
+    selector: 'app-view-expenses',
+    templateUrl: './view-expenses.page.html',
+    styleUrls: ['./view-expenses.page.scss'],
+    standalone: false
 })
 export class ViewExpensesPage implements OnInit {
   expenses: Expense[] = [];

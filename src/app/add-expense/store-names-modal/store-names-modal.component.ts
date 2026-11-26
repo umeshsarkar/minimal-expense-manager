@@ -3,9 +3,10 @@ import { ModalController } from '@ionic/angular';
 import { StorageService } from 'src/app/service/storage.service';
 
 @Component({
-  selector: 'app-store-names-modal',
-  templateUrl: './store-names-modal.component.html',
-  styleUrls: ['./store-names-modal.component.scss'],
+    selector: 'app-store-names-modal',
+    templateUrl: './store-names-modal.component.html',
+    styleUrls: ['./store-names-modal.component.scss'],
+    standalone: false
 })
 export class StoreNamesModalComponent implements OnInit {
   categoryList: string[] = [];
