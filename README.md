@@ -57,7 +57,7 @@ The images in [`docs/screenshots/`](docs/screenshots) are captured by [`scripts/
 
 The **screenshots** job in [`.github/workflows/main.yml`](.github/workflows/main.yml) keeps them up to date:
 
-- **On every push to `main`** (after lint, tests and build pass), it regenerates the screenshots and commits them back to `main` only if something changed.
+- **On every push to `main`** (after lint, tests and build pass), it regenerates the screenshots. If any image changed, it opens a pull request (branch `bot/update-screenshots`), or updates the one that's already open. Merge it to refresh the README. `main` only accepts changes through pull requests, so the job never pushes to it directly.
 - **On pull requests**, it uploads the screenshots as a workflow artifact, so reviewers can see UI changes before merging. It does not commit.
 - **Manually**, from *Actions → Build Ionic Angular App → Run workflow*.
 
