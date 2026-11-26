@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Expense } from '../model/expense.model';
-import { DEFAULT_EXPENSE_SORT, ExpenseSortOption, isExpenseSortOption } from '../model/expense-sort';
+import { DEFAULT_EXPENSE_SORT, ExpenseSortOption, isExpenseSortOption } from '../model/expense-list';
 
 const SORT_KEY = 'expenseSort';
 
@@ -42,6 +42,20 @@ export class ExpenseService {
       return false;
     }
     this.deleteExpense(index);
+    return true;
+  }
+
+  /**
+   * Replaces this exact expense object (as returned by getExpenses()) with
+   * `updated`, keeping its position so "same-day, most recently added" order is preserved.
+   */
+  updateExpense(original: Expense, updated: Expense): boolean {
+    const index = this.expenses.indexOf(original);
+    if (index === -1) {
+      return false;
+    }
+    this.expenses[index] = { ...updated };
+    this.saveExpenses();
     return true;
   }
 

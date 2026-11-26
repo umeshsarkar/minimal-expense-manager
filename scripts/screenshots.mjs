@@ -105,6 +105,14 @@ const SCREENS = [
       await page.getByText('Total Expenses').waitFor();
     },
   },
+  {
+    name: 'edit-expense',
+    path: '/view-expenses',
+    async prepare(page) {
+      await page.locator('ion-item.expense-item', { hasText: 'Weekly groceries' }).click();
+      await page.locator('app-edit-expense-modal ion-datetime').waitFor();
+    },
+  },
 ];
 
 async function capture(browser, baseUrl, theme, screen) {

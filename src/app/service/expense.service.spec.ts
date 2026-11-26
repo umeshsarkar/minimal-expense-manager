@@ -63,4 +63,17 @@ describe('ExpenseService', () => {
     localStorage.setItem('expenseSort', 'garbage');
     expect(service.getSortOption()).toBe('newest');
   });
+
+  it('updates an expense in place and persists it', () => {
+    const service = TestBed.inject(ExpenseService);
+    service.addExpense(coffee);
+    service.addExpense(bus);
+    const [storedCoffee] = service.getExpenses();
+    const espresso = { ...coffee, name: 'Espresso', amount: 4 };
+
+    expect(service.updateExpense(storedCoffee, espresso)).toBe(true);
+    expect(service.getExpenses()).toEqual([espresso, bus]);
+    expect(JSON.parse(localStorage.getItem('expenses')!)).toEqual([espresso, bus]);
+    expect(service.updateExpense({ ...bus }, espresso)).toBe(false);
+  });
 });

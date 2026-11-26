@@ -1,0 +1,40 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="cancel()">Cancel</ion-button>
+    </ion-buttons>
+    <ion-title color="tertiary">Edit Expense</ion-title>
+    <ion-buttons slot="end">
+      <ion-button strong color="tertiary" (click)="save()">Save</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item>
+      <ion-input type="text" label="Expense name" labelPlacement="stacked" [(ngModel)]="name"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-select label="Category" [(ngModel)]="category">
+        @for (option of categoryOptions; track option) {
+          <ion-select-option [value]="option">{{ option }}</ion-select-option>
+        }
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-input type="number" label="Amount (€)" labelPlacement="stacked" [(ngModel)]="amount"></ion-input>
+    </ion-item>
+    <ion-item lines="none">
+      <ion-label color="tertiary">Date of purchase</ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ion-datetime presentation="date" [value]="isoDate" (ionChange)="onDateChange($event)"></ion-datetime>
+
+  @if (errorMessage) {
+    <ion-text color="danger" class="error-message">
+      <p role="alert">{{ errorMessage }}</p>
+    </ion-text>
+  }
+</ion-content>
