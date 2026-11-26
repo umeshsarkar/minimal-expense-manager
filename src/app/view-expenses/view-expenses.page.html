@@ -13,24 +13,76 @@
       <h1>View Expenses</h1>
     </ion-label>
   </ion-item>
-  <ion-list>
-    @for (expense of expenses; track expense; let i = $index) {
-      <ion-item>
-        <ion-label color="tertiary">
-          <h2>{{ expense.amount }} €</h2>
-          <p>{{ expense.name }}</p>
-          <p>{{ expense.category }} | {{ expense.date }}</p>
-        </ion-label>
-        <ion-icon name="trash-outline" slot="end" color="danger" (click)="deleteExpense(i)"></ion-icon>
+
+  @if (savedCount > 1) {
+    <div class="list-controls">
+      <ion-searchbar placeholder="Search by name" [value]="filter.query" [debounce]="150"
+        (ionInput)="onSearch($event)"></ion-searchbar>
+      <ion-item lines="none" class="control-item">
+        <ion-icon name="funnel-outline" slot="start" color="tertiary" aria-hidden="true"></ion-icon>
+        <ion-select label="Category" interface="popover" class="category-select"
+          [value]="filter.category ?? allCategories" (ionChange)="onCategoryChange($event)">
+          <ion-select-option [value]="allCategories">All categories</ion-select-option>
+          @for (category of categories; track category) {
+            <ion-select-option [value]="category">{{ category }}</ion-select-option>
+          }
+        </ion-select>
       </ion-item>
+      <ion-item lines="none" class="control-item sort-item">
+        <ion-icon name="swap-vertical-outline" slot="start" color="tertiary" aria-hidden="true"></ion-icon>
+        <ion-select label="Sort by" interface="popover" class="sort-select" [value]="sortOption"
+          (ionChange)="onSortChange($event)">
+          @for (option of sortOptions; track option.value) {
+            <ion-select-option [value]="option.value">{{ option.label }}</ion-select-option>
+          }
+        </ion-select>
+      </ion-item>
+    </div>
+  }
+
+  <ion-list>
+    @for (group of groups; track group.key) {
+      <ion-item-group>
+        @if (group.label) {
+          <ion-item-divider sticky class="month-divider">
+            <ion-label>{{ group.label }}</ion-label>
+            <ion-note slot="end" class="month-total">{{ group.total | number: '1.0-2' }} €</ion-note>
+          </ion-item-divider>
+        }
+        @for (expense of group.expenses; track expense) {
+          <ion-item button [detail]="false" (click)="editExpense(expense)" class="expense-item">
+            <ion-label color="tertiary">
+              <h2>{{ expense.amount }} €</h2>
+              <p>{{ expense.name }}</p>
+              <p>{{ expense.category }} | {{ expense.date }}</p>
+            </ion-label>
+            <ion-button slot="end" fill="clear" color="danger" class="delete-button" aria-label="Delete expense"
+              (click)="deleteExpense(expense, $event)">
+              <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+            </ion-button>
+          </ion-item>
+        }
+      </ion-item-group>
     }
   </ion-list>
+
+  @if (savedCount > 0 && expenses.length === 0) {
+    <div class="empty-state ion-text-center ion-padding">
+      <p>No expenses match your search.</p>
+      <ion-button fill="outline" color="tertiary" (click)="clearFilters()">Clear filters</ion-button>
+    </div>
+  }
 </ion-content>
 
 <ion-footer>
   <ion-toolbar class="footer-toolbar">
     <ion-label color="tertiary" class="ion-text-center">
-      <h1>Total Expenses: {{ totalExpense | number: '1.0-2' }} €</h1>
+      @if (filtered) {
+        <h1>Filtered total: {{ totalExpense | number: '1.0-2' }} €</h1>
+        <p class="overall-total">of {{ overallTotal | number: '1.0-2' }} € in total</p>
+      } @else {
+        <h1>Total Expenses: {{ totalExpense | number: '1.0-2' }} €</h1>
+      }
     </ion-label>
     <ion-button fill="outline" expand="block" color="tertiary" class="footer-button-margin ion-padding"
       (click)="navigateToAddExpense()">

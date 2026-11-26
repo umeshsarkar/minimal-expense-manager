@@ -7,6 +7,7 @@ import {
 import { addIcons } from 'ionicons';
 import { addCircleOutline, closeOutline, trashOutline } from 'ionicons/icons';
 import { StorageService } from '../../service/storage.service';
+import { parseStoredCategories } from '../../model/categories';
 
 @Component({
     selector: 'app-store-names-modal',
@@ -37,7 +38,7 @@ export class StoreNamesModalComponent implements OnInit {
 
   async loadCategoryList() {
     const storedLocations = await this.storageService.getItem('category');
-    this.categoryList = storedLocations ? JSON.parse(storedLocations) : ['Food', 'Internet', 'Transport', 'Car'];
+    this.categoryList = parseStoredCategories(storedLocations);
   }
 
   async addStoreName() {

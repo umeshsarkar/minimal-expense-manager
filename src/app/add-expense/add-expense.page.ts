@@ -10,6 +10,7 @@ import {
 import { addIcons } from 'ionicons';
 import { addCircleOutline, createOutline, eyeOutline } from 'ionicons/icons';
 import { StorageService } from '../service/storage.service';
+import { parseStoredCategories } from '../model/categories';
 import { StoreNamesModalComponent } from './store-names-modal/store-names-modal.component';
 
 @Component({
@@ -107,9 +108,7 @@ export class AddExpensePage implements OnInit {
 
   async loadCategoryList() {
     const storedCategoryList = await this.storageService.getItem('category');
-    this.categoryList = storedCategoryList
-      ? JSON.parse(storedCategoryList)
-      : ['Food', 'Internet', 'Transport', 'Car'];
+    this.categoryList = parseStoredCategories(storedCategoryList);
   }
 
   async openStoreNamesModal() {

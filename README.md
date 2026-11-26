@@ -6,6 +6,15 @@ The Minimalistic Expense Manager stores data locally, ensuring that personal dat
 
 This project uses [Ionic](https://ionicframework.com/) as an app development platform and [Capacitor](https://capacitorjs.com/) to build the Android app.
 
+## Features
+
+- Add expenses with a name, category, date and amount; manage your own categories
+- View expenses grouped by month with monthly subtotals
+- Sort by newest, oldest, or amount (high/low); the choice is remembered
+- Filter by category and search by name; the total follows the filters
+- Tap an expense to edit it; delete with confirmation
+- Light and dark mode; all data stays on the device
+
 ## Screenshots
 
 <table>
@@ -13,6 +22,7 @@ This project uses [Ionic](https://ionicframework.com/) as an app development pla
     <th>Add an expense</th>
     <th>Manage categories</th>
     <th>View expenses</th>
+    <th>Edit an expense</th>
   </tr>
   <tr>
     <td>
@@ -30,7 +40,13 @@ This project uses [Ionic](https://ionicframework.com/) as an app development pla
     <td>
       <picture>
         <source media="(prefers-color-scheme: dark)" srcset="docs/screenshots/view-expenses-dark.png">
-        <img src="docs/screenshots/view-expenses-light.png" width="250" alt="View Expenses screen with a list of expenses and the total">
+        <img src="docs/screenshots/view-expenses-light.png" width="250" alt="View Expenses screen with search, category filter, sorting, month groups and the total">
+      </picture>
+    </td>
+    <td>
+      <picture>
+        <source media="(prefers-color-scheme: dark)" srcset="docs/screenshots/edit-expense-dark.png">
+        <img src="docs/screenshots/edit-expense-light.png" width="250" alt="Edit Expense dialog with name, category, amount and date">
       </picture>
     </td>
   </tr>

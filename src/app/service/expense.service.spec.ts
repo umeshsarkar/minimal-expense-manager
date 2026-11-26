@@ -43,4 +43,37 @@ describe('ExpenseService', () => {
     expect(service.getExpenses()).toEqual([bus]);
     expect(JSON.parse(localStorage.getItem('expenses')!)).toEqual([bus]);
   });
+
+  it('removes an exact expense object regardless of its position', () => {
+    const service = TestBed.inject(ExpenseService);
+    service.addExpense(coffee);
+    service.addExpense(bus);
+
+    expect(service.removeExpense(bus)).toBe(true);
+    expect(service.getExpenses()).toEqual([coffee]);
+    expect(service.removeExpense({ ...coffee })).toBe(false); // a copy is not the stored object
+    expect(service.getExpenses()).toEqual([coffee]);
+  });
+
+  it('stores the sort preference and defaults to newest first', () => {
+    const service = TestBed.inject(ExpenseService);
+    expect(service.getSortOption()).toBe('newest');
+    service.setSortOption('amount-asc');
+    expect(service.getSortOption()).toBe('amount-asc');
+    localStorage.setItem('expenseSort', 'garbage');
+    expect(service.getSortOption()).toBe('newest');
+  });
+
+  it('updates an expense in place and persists it', () => {
+    const service = TestBed.inject(ExpenseService);
+    service.addExpense(coffee);
+    service.addExpense(bus);
+    const [storedCoffee] = service.getExpenses();
+    const espresso = { ...coffee, name: 'Espresso', amount: 4 };
+
+    expect(service.updateExpense(storedCoffee, espresso)).toBe(true);
+    expect(service.getExpenses()).toEqual([espresso, bus]);
+    expect(JSON.parse(localStorage.getItem('expenses')!)).toEqual([espresso, bus]);
+    expect(service.updateExpense({ ...bus }, espresso)).toBe(false);
+  });
 });

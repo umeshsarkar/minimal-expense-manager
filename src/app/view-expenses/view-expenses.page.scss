@@ -20,3 +20,33 @@ ion-content {
 ion-label h1, ion-label h2 {
   margin: 0;
 }
+
+.list-controls ion-searchbar {
+  padding-bottom: 0;
+}
+
+.control-item ion-select {
+  --color: var(--ion-color-tertiary);
+}
+
+.control-item ion-select::part(label) {
+  color: var(--ion-color-tertiary);
+}
+
+.month-divider {
+  --color: var(--ion-color-tertiary);
+  font-weight: 600;
+}
+
+.month-total {
+  color: var(--ion-color-tertiary);
+  font-size: 0.95em;
+}
+
+.overall-total {
+  margin: 2px 0 0;
+}
+
+.empty-state p {
+  color: var(--ion-color-medium);
+}
