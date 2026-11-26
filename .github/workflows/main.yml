@@ -38,7 +38,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    # Never run two screenshot commits against main at the same time.
+      pull-requests: write
+    # Never run two screenshot updates against the same ref at the same time.
     concurrency:
       group: screenshots-${{ github.ref }}
       cancel-in-progress: true
@@ -71,21 +72,26 @@ jobs:
           name: screenshots
           path: docs/screenshots/*.png
 
-      # Only on main: commit the images back when they changed. Pushes made
-      # with GITHUB_TOKEN do not trigger new workflow runs, so this cannot loop.
-      - name: Commit updated screenshots
+      # Only on main: main is protected ("changes must be made through a pull
+      # request"), so changed images are proposed in a single bot PR that is
+      # created or updated in place. No changes -> no PR. Requires the repo
+      # setting "Allow GitHub Actions to create and approve pull requests".
+      - name: Open pull request with updated screenshots
         if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
-        run: |
-          git add docs/screenshots
-          if git diff --cached --quiet; then
-            echo "Screenshots unchanged."
-            exit 0
-          fi
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -m "docs: update app screenshots [skip ci]"
-          git pull --rebase origin main
-          git push origin HEAD:main
+        uses: peter-evans/create-pull-request@v8
+        with:
+          branch: bot/update-screenshots
+          delete-branch: true
+          add-paths: docs/screenshots/*.png
+          commit-message: 'docs: update app screenshots'
+          title: 'docs: update app screenshots'
+          body: |
+            Screenshots regenerated from `${{ github.sha }}` by the **screenshots** job
+            ([run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})).
+
+            Merge to refresh the images in the README. This PR is updated automatically
+            on each push to `main` while it is open.
+          labels: screenshots
 
   release:
     needs: checks
@@ -126,17 +132,32 @@ jobs:
         working-directory: android
         run: ./gradlew assembleRelease
 
-      - name: List APK artifacts
-        run: ls -la android/app/build/outputs/apk/release
+      # Don't hardcode the APK filename: read the one Gradle actually produced
+      # from output-metadata.json (fall back to any *.apk in the folder).
+      - name: Locate APK
+        run: |
+          dir=android/app/build/outputs/apk/release
+          ls -la "$dir"
+          apk=""
+          if [ -f "$dir/output-metadata.json" ]; then
+            apk="$dir/$(jq -r '.elements[0].outputFile' "$dir/output-metadata.json")"
+          fi
+          if [ ! -f "$apk" ]; then
+            apk=$(find "$dir" -maxdepth 1 -name '*.apk' | head -n 1)
+          fi
+          if [ -z "$apk" ] || [ ! -f "$apk" ]; then
+            echo "::error::No APK found in $dir"
+            exit 1
+          fi
+          echo "Using $apk"
+          cp "$apk" app-release.apk
 
       - name: Upload APK
         uses: actions/upload-artifact@v7
         with:
           name: app-release.apk
-          path: android/app/build/outputs/apk/release/app-release-unsigned.apk
-
-      - name: Prepare release asset
-        run: cp android/app/build/outputs/apk/release/app-release-unsigned.apk app-release.apk
+          path: app-release.apk
+          if-no-files-found: error
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v3
