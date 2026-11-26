@@ -1,17 +1,34 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import { ExpenseService } from '../service/expense.service';
 import { Expense } from '../model/expense.model';
 import { Router } from '@angular/router';
-import { ModalController, ToastController } from '@ionic/angular';
+import { FormsModule } from '@angular/forms';
+import {
+  IonButton, IonContent, IonDatetime, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonList,
+  IonModal, IonSelect, IonSelectOption, IonTitle, IonToolbar, ModalController, ToastController,
+} from '@ionic/angular';
+import { addIcons } from 'ionicons';
+import { addCircleOutline, createOutline, eyeOutline } from 'ionicons/icons';
 import { StorageService } from '../service/storage.service';
 import { StoreNamesModalComponent } from './store-names-modal/store-names-modal.component';
 
 @Component({
-  selector: 'app-add-expense',
-  templateUrl: './add-expense.page.html',
-  styleUrls: ['./add-expense.page.scss'],
+    selector: 'app-add-expense',
+    templateUrl: './add-expense.page.html',
+    styleUrls: ['./add-expense.page.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [
+      FormsModule, IonHeader, IonToolbar, IonTitle, IonContent, IonItem, IonLabel, IonList, IonInput,
+      IonSelect, IonSelectOption, IonIcon, IonButton, IonModal, IonDatetime,
+    ],
 })
 export class AddExpensePage implements OnInit {
+  private expenseService = inject(ExpenseService);
+  private router = inject(Router);
+  private toastController = inject(ToastController);
+  private storageService = inject(StorageService);
+  private modalController = inject(ModalController);
+
   name!: string;
   date: any;
   category: string | null = null;
@@ -19,13 +36,8 @@ export class AddExpensePage implements OnInit {
   isDatePickerOpen: boolean = false;
   categoryList: string[] = [];
 
-  constructor(
-    private expenseService: ExpenseService,
-    private router: Router,
-    private toastController: ToastController,
-    private storageService: StorageService,
-    private modalController: ModalController
-  ) {
+  constructor() {
+    addIcons({ addCircleOutline, createOutline, eyeOutline });
     this.setCurrentDate();
     this.loadCategoryList();
   }

@@ -14,7 +14,9 @@
     </ion-item>
     <ion-item>
       <ion-select label="Category" [(ngModel)]="category">
-        <ion-select-option *ngFor="let loc of categoryList" [value]="loc">{{ loc }}</ion-select-option>
+        @for (loc of categoryList; track loc) {
+          <ion-select-option [value]="loc">{{ loc }}</ion-select-option>
+        }
       </ion-select>
       <ion-icon name="create-outline" color="tertiary" (click)="openStoreNamesModal()"></ion-icon>
     </ion-item>

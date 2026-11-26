@@ -1,22 +1,35 @@
-import { Component, OnInit } from '@angular/core';
-import { ModalController } from '@ionic/angular';
-import { StorageService } from 'src/app/service/storage.service';
+import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import {
+  IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonInput, IonItem, IonList, IonText, IonTitle,
+  IonToolbar, ModalController,
+} from '@ionic/angular';
+import { addIcons } from 'ionicons';
+import { addCircleOutline, closeOutline, trashOutline } from 'ionicons/icons';
+import { StorageService } from '../../service/storage.service';
 
 @Component({
-  selector: 'app-store-names-modal',
-  templateUrl: './store-names-modal.component.html',
-  styleUrls: ['./store-names-modal.component.scss'],
+    selector: 'app-store-names-modal',
+    templateUrl: './store-names-modal.component.html',
+    styleUrls: ['./store-names-modal.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [
+      FormsModule, IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, IonIcon, IonContent, IonList,
+      IonItem, IonInput, IonText,
+    ],
 })
 export class StoreNamesModalComponent implements OnInit {
+  private modalController = inject(ModalController);
+  private storageService = inject(StorageService);
+
+  constructor() {
+    addIcons({ addCircleOutline, closeOutline, trashOutline });
+  }
+
   categoryList: string[] = [];
   newCategory!: string;
   isInputInvalid = false;
   isModalOpen = true;
-
-  constructor(
-    private modalController: ModalController,
-    private storageService: StorageService
-  ) {}
 
   async ngOnInit() {
     await this.loadCategoryList();

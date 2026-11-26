@@ -1,23 +1,35 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import { ExpenseService } from '../service/expense.service';
 import { Expense } from '../model/expense.model';
 import { Router } from '@angular/router';
-import { AlertController } from '@ionic/angular';
+import {
+  AlertController, IonBackButton, IonButton, IonButtons, IonContent, IonFooter, IonHeader, IonIcon, IonItem,
+  IonLabel, IonList, IonTitle, IonToolbar,
+} from '@ionic/angular';
+import { addIcons } from 'ionicons';
+import { addCircleOutline, trashOutline } from 'ionicons/icons';
 
 @Component({
-  selector: 'app-view-expenses',
-  templateUrl: './view-expenses.page.html',
-  styleUrls: ['./view-expenses.page.scss'],
+    selector: 'app-view-expenses',
+    templateUrl: './view-expenses.page.html',
+    styleUrls: ['./view-expenses.page.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [
+      IonHeader, IonToolbar, IonButtons, IonBackButton, IonTitle, IonContent, IonItem, IonLabel, IonList,
+      IonIcon, IonFooter, IonButton,
+    ],
 })
 export class ViewExpensesPage implements OnInit {
+  private expenseService = inject(ExpenseService);
+  private router = inject(Router);
+  private alertController = inject(AlertController);
+
+  constructor() {
+    addIcons({ addCircleOutline, trashOutline });
+  }
+
   expenses: Expense[] = [];
   totalExpense: number = 0;
-
-  constructor(
-    private expenseService: ExpenseService,
-    private router: Router,
-    private alertController: AlertController
-  ) {}
 
   async ngOnInit() {
     await this.loadExpenses();
