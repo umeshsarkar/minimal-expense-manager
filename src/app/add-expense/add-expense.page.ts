@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import { ExpenseService } from '../service/expense.service';
 import { Expense } from '../model/expense.model';
 import { Router } from '@angular/router';
@@ -21,6 +21,12 @@ import { StoreNamesModalComponent } from './store-names-modal/store-names-modal.
     ],
 })
 export class AddExpensePage implements OnInit {
+  private expenseService = inject(ExpenseService);
+  private router = inject(Router);
+  private toastController = inject(ToastController);
+  private storageService = inject(StorageService);
+  private modalController = inject(ModalController);
+
   name!: string;
   date: any;
   category: string | null = null;
@@ -28,13 +34,7 @@ export class AddExpensePage implements OnInit {
   isDatePickerOpen: boolean = false;
   categoryList: string[] = [];
 
-  constructor(
-    private expenseService: ExpenseService,
-    private router: Router,
-    private toastController: ToastController,
-    private storageService: StorageService,
-    private modalController: ModalController
-  ) {
+  constructor() {
     this.setCurrentDate();
     this.loadCategoryList();
   }

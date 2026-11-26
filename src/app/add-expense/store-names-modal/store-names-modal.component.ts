@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
   IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonInput, IonItem, IonList, IonText, IonTitle,
@@ -17,15 +17,13 @@ import { StorageService } from '../../service/storage.service';
     ],
 })
 export class StoreNamesModalComponent implements OnInit {
+  private modalController = inject(ModalController);
+  private storageService = inject(StorageService);
+
   categoryList: string[] = [];
   newCategory!: string;
   isInputInvalid = false;
   isModalOpen = true;
-
-  constructor(
-    private modalController: ModalController,
-    private storageService: StorageService
-  ) {}
 
   async ngOnInit() {
     await this.loadCategoryList();

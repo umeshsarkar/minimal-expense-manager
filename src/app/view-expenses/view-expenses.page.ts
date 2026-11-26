@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import { ExpenseService } from '../service/expense.service';
 import { Expense } from '../model/expense.model';
 import { Router } from '@angular/router';
@@ -18,14 +18,12 @@ import {
     ],
 })
 export class ViewExpensesPage implements OnInit {
+  private expenseService = inject(ExpenseService);
+  private router = inject(Router);
+  private alertController = inject(AlertController);
+
   expenses: Expense[] = [];
   totalExpense: number = 0;
-
-  constructor(
-    private expenseService: ExpenseService,
-    private router: Router,
-    private alertController: AlertController
-  ) {}
 
   async ngOnInit() {
     await this.loadExpenses();
