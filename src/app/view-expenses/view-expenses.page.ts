@@ -1,14 +1,15 @@
 import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import { ExpenseService } from '../service/expense.service';
 import { Expense } from '../model/expense.model';
+import { EXPENSE_SORT_OPTIONS, ExpenseSortOption, isExpenseSortOption, sortExpenses } from '../model/expense-sort';
 import { DecimalPipe } from '@angular/common';
 import { Router } from '@angular/router';
 import {
   AlertController, IonBackButton, IonButton, IonButtons, IonContent, IonFooter, IonHeader, IonIcon, IonItem,
-  IonLabel, IonList, IonTitle, IonToolbar,
+  IonLabel, IonList, IonSelect, IonSelectOption, IonTitle, IonToolbar, SelectCustomEvent,
 } from '@ionic/angular';
 import { addIcons } from 'ionicons';
-import { addCircleOutline, trashOutline } from 'ionicons/icons';
+import { addCircleOutline, swapVerticalOutline, trashOutline } from 'ionicons/icons';
 
 @Component({
     selector: 'app-view-expenses',
@@ -17,7 +18,7 @@ import { addCircleOutline, trashOutline } from 'ionicons/icons';
     changeDetection: ChangeDetectionStrategy.Eager,
     imports: [
       IonHeader, IonToolbar, IonButtons, IonBackButton, IonTitle, IonContent, IonItem, IonLabel, IonList,
-      IonIcon, IonFooter, IonButton, DecimalPipe,
+      IonIcon, IonFooter, IonButton, IonSelect, IonSelectOption, DecimalPipe,
     ],
 })
 export class ViewExpensesPage implements OnInit {
@@ -26,9 +27,11 @@ export class ViewExpensesPage implements OnInit {
   private alertController = inject(AlertController);
 
   constructor() {
-    addIcons({ addCircleOutline, trashOutline });
+    addIcons({ addCircleOutline, swapVerticalOutline, trashOutline });
   }
 
+  readonly sortOptions = EXPENSE_SORT_OPTIONS;
+  sortOption: ExpenseSortOption = this.expenseService.getSortOption();
   expenses: Expense[] = [];
   totalExpense: number = 0;
 
@@ -41,16 +44,25 @@ export class ViewExpensesPage implements OnInit {
   }
 
   private async loadExpenses() {
-    this.expenses = this.expenseService.getExpenses();
+    this.expenses = sortExpenses(this.expenseService.getExpenses(), this.sortOption);
     this.totalExpense = this.expenseService.getTotalExpense();
+  }
+
+  onSortChange(event: SelectCustomEvent) {
+    const value = event.detail.value;
+    if (!isExpenseSortOption(value) || value === this.sortOption) {
+      return;
+    }
+    this.sortOption = value;
+    this.expenseService.setSortOption(value);
+    this.expenses = sortExpenses(this.expenseService.getExpenses(), value);
   }
 
   navigateToAddExpense() {
     this.router.navigateByUrl('/add-expense');
   }
 
-  async deleteExpense(index: number) {
-    const expense = this.expenses[index];
+  async deleteExpense(expense: Expense) {
     const alert = await this.alertController.create({
       header: 'Confirm Deletion',
       message: `Are you sure you want to delete the expense name "${expense.name}" and amount of "${expense.amount} €"?`,
@@ -66,7 +78,7 @@ export class ViewExpensesPage implements OnInit {
         {
           text: 'Delete',
           handler: async () => {
-            await this.expenseService.deleteExpense(index);
+            this.expenseService.removeExpense(expense);
             await this.loadExpenses();
           },
         },

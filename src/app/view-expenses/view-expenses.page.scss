@@ -20,3 +20,11 @@ ion-content {
 ion-label h1, ion-label h2 {
   margin: 0;
 }
+
+.sort-item ion-select {
+  --color: var(--ion-color-tertiary);
+}
+
+.sort-item ion-select::part(label) {
+  color: var(--ion-color-tertiary);
+}

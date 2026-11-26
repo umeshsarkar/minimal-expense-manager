@@ -13,15 +13,25 @@
       <h1>View Expenses</h1>
     </ion-label>
   </ion-item>
+  @if (expenses.length > 1) {
+    <ion-item lines="none" class="sort-item">
+      <ion-icon name="swap-vertical-outline" slot="start" color="tertiary" aria-hidden="true"></ion-icon>
+      <ion-select label="Sort by" interface="popover" [value]="sortOption" (ionChange)="onSortChange($event)">
+        @for (option of sortOptions; track option.value) {
+          <ion-select-option [value]="option.value">{{ option.label }}</ion-select-option>
+        }
+      </ion-select>
+    </ion-item>
+  }
   <ion-list>
-    @for (expense of expenses; track expense; let i = $index) {
+    @for (expense of expenses; track expense) {
       <ion-item>
         <ion-label color="tertiary">
           <h2>{{ expense.amount }} €</h2>
           <p>{{ expense.name }}</p>
           <p>{{ expense.category }} | {{ expense.date }}</p>
         </ion-label>
-        <ion-icon name="trash-outline" slot="end" color="danger" (click)="deleteExpense(i)"></ion-icon>
+        <ion-icon name="trash-outline" slot="end" color="danger" (click)="deleteExpense(expense)"></ion-icon>
       </ion-item>
     }
   </ion-list>
