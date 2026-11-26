@@ -54,6 +54,15 @@ describe('ViewExpensesPage', () => {
     expect(text).toContain('Total Expenses: 5.5 €');
   });
 
+  it('rounds the total to cents (no floating-point noise)', () => {
+    // 64.3 + 49 + 39.99 + 120 in floating point:
+    component.totalExpense = 64.3 + 49 + 39.99 + 120;
+    expect(component.totalExpense).not.toBe(273.29);
+    fixture.detectChanges();
+
+    expect((fixture.nativeElement as HTMLElement).textContent).toContain('Total Expenses: 273.29 €');
+  });
+
   it('deletes an expense after confirming the alert', async () => {
     await component.deleteExpense(0);
     expect(alertOptions?.message).toContain('"Coffee"');

@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-back-button default-href="#"></ion-back-button>
     </ion-buttons>
-    <ion-title color="tertiary">Minimal Expanse Manger</ion-title>
+    <ion-title color="tertiary">Minimal Expense Manager</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -30,7 +30,7 @@
 <ion-footer>
   <ion-toolbar class="footer-toolbar">
     <ion-label color="tertiary" class="ion-text-center">
-      <h1>Total Expenses: {{ totalExpense }} €</h1>
+      <h1>Total Expenses: {{ totalExpense | number: '1.0-2' }} €</h1>
     </ion-label>
     <ion-button fill="outline" expand="block" color="tertiary" class="footer-button-margin ion-padding"
       (click)="navigateToAddExpense()">

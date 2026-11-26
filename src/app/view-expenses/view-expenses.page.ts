@@ -1,6 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import { ExpenseService } from '../service/expense.service';
 import { Expense } from '../model/expense.model';
+import { DecimalPipe } from '@angular/common';
 import { Router } from '@angular/router';
 import {
   AlertController, IonBackButton, IonButton, IonButtons, IonContent, IonFooter, IonHeader, IonIcon, IonItem,
@@ -16,7 +17,7 @@ import { addCircleOutline, trashOutline } from 'ionicons/icons';
     changeDetection: ChangeDetectionStrategy.Eager,
     imports: [
       IonHeader, IonToolbar, IonButtons, IonBackButton, IonTitle, IonContent, IonItem, IonLabel, IonList,
-      IonIcon, IonFooter, IonButton,
+      IonIcon, IonFooter, IonButton, DecimalPipe,
     ],
 })
 export class ViewExpensesPage implements OnInit {

@@ -5,6 +5,7 @@ on:
     branches:
       - main
   pull_request:
+  workflow_dispatch: # manual run: checks + screenshots (no APK release)
 
 jobs:
   checks:
@@ -31,6 +32,60 @@ jobs:
 
       - name: Build app
         run: npm run build
+
+  screenshots:
+    needs: checks
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    # Never run two screenshot commits against main at the same time.
+    concurrency:
+      group: screenshots-${{ github.ref }}
+      cancel-in-progress: true
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build web app
+        run: npm run build
+
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Capture screenshots
+        run: npm run screenshots
+
+      - name: Upload screenshots
+        uses: actions/upload-artifact@v7
+        with:
+          name: screenshots
+          path: docs/screenshots/*.png
+
+      # Only on main: commit the images back when they changed. Pushes made
+      # with GITHUB_TOKEN do not trigger new workflow runs, so this cannot loop.
+      - name: Commit updated screenshots
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        run: |
+          git add docs/screenshots
+          if git diff --cached --quiet; then
+            echo "Screenshots unchanged."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "docs: update app screenshots [skip ci]"
+          git pull --rebase origin main
+          git push origin HEAD:main
 
   release:
     needs: checks
