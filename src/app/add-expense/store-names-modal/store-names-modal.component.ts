@@ -1,12 +1,20 @@
-import { Component, OnInit } from '@angular/core';
-import { ModalController } from '@ionic/angular';
-import { StorageService } from 'src/app/service/storage.service';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import {
+  IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonInput, IonItem, IonList, IonText, IonTitle,
+  IonToolbar, ModalController,
+} from '@ionic/angular';
+import { StorageService } from '../../service/storage.service';
 
 @Component({
     selector: 'app-store-names-modal',
     templateUrl: './store-names-modal.component.html',
     styleUrls: ['./store-names-modal.component.scss'],
-    standalone: false
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [
+      FormsModule, IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, IonIcon, IonContent, IonList,
+      IonItem, IonInput, IonText,
+    ],
 })
 export class StoreNamesModalComponent implements OnInit {
   categoryList: string[] = [];

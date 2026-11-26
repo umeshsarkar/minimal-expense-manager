@@ -1,14 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ExpenseService } from '../service/expense.service';
 import { Expense } from '../model/expense.model';
 import { Router } from '@angular/router';
-import { AlertController } from '@ionic/angular';
+import {
+  AlertController, IonBackButton, IonButton, IonButtons, IonContent, IonFooter, IonHeader, IonIcon, IonItem,
+  IonLabel, IonList, IonTitle, IonToolbar,
+} from '@ionic/angular';
 
 @Component({
     selector: 'app-view-expenses',
     templateUrl: './view-expenses.page.html',
     styleUrls: ['./view-expenses.page.scss'],
-    standalone: false
+    changeDetection: ChangeDetectionStrategy.Eager,
+    imports: [
+      IonHeader, IonToolbar, IonButtons, IonBackButton, IonTitle, IonContent, IonItem, IonLabel, IonList,
+      IonIcon, IonFooter, IonButton,
+    ],
 })
 export class ViewExpensesPage implements OnInit {
   expenses: Expense[] = [];
